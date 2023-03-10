@@ -3,7 +3,12 @@ const app = express();
 const connectDB = require("./db/connect");
 const taskRoute = require("./routes/tasks");
 require("dotenv").config();
+
 app.use(express.json());
+
+// 静的なファイルを使いますよ
+app.use(express.static("./public"));
+
 
 const PORT = 5001;
 
