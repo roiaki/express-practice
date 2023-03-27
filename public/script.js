@@ -5,12 +5,22 @@
 const tasksDOM = document.querySelector(".tasks");
 const formDOM = document.querySelector(".task-form");
 const taskInputDOM = document.querySelector(".task-input");
+const formAlertDOM = document.querySelector(".form-alert");
 
+
+// タスク一覧を表示する
 const showTasks = async () => {
   try {
     // 自作APIを叩く
     const { data: tasks } = await axios.get("/api/v1/tasks");
     // console.log(tasks);
+
+    console.log(tasks.length);
+    if(tasks.length < 1) {
+      tasksDOM.innerHTML =`<h3 class="empty-list">タスクがありません</h3>`;
+      return;
+    }
+
 
     // タスク出力
     const allTasks = tasks.map((task) => {
@@ -52,10 +62,18 @@ formDOM.addEventListener("submit", async(event) => {
     await axios.post("/api/v1/tasks", {name: name});
     showTasks();
     taskInputDOM.value = "";
+    formAlertDOM.style.display = "block";
+    formAlertDOM.textContent = "タスクを追加しました";
+    formAlertDOM.classList.add("text-success");
 
   } catch(err) {
     console.log(err);
+    formAlertDOM.innerHTML = "20文字以内で入力してください";
   }
+  setTimeout(() => {
+    formAlertDOM.style.display = "none";
+    formAlertDOM.classList.remove("text-success");
+  }, 3000);
 
 });
 
@@ -66,10 +84,10 @@ tasksDOM.addEventListener("click", async (event) => {
   
   if(element.parentElement.classList.contains("delete-btn")) {
     const id = element.parentElement.dataset.id;
-    console.log(id);
+    // console.log(id);
     try {
       await axios.delete(`/api/v1/tasks/${id}`)
-
+      showTasks();
     } catch(err) {
       console.log(err);
     }

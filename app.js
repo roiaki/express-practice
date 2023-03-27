@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const connectDB = require("./db/connect");
 const taskRoute = require("./routes/tasks");
+
+// .envファイル読み込み
 require("dotenv").config();
 
 app.use(express.json());
