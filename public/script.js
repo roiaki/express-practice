@@ -8,7 +8,7 @@ const taskInputDOM = document.querySelector(".task-input");
 const formAlertDOM = document.querySelector(".form-alert");
 
 
-// タスク一覧を表示する
+// タスク一覧表示
 const showTasks = async () => {
   try {
     // 自作APIを叩く
@@ -21,26 +21,25 @@ const showTasks = async () => {
       return;
     }
 
-
     // タスク出力
     const allTasks = tasks.map((task) => {
       const { completed, _id, name } = task;
-      return `<div class="single-task">
-      <h5>
-        <span><i class="fas fa-check-circle"></i></span>
-        ${name}
-      </h5>
-      <div class="task-link">
-        <!-- 編集リンク-->
-        <a href="edit.html?id=${_id}" class="edit-link">
-          <i class="fas fa-edit"></i>
-        </a>
-        <!-- ゴミ箱 -->
-        <button type="button" class="delete-btn" data-id="${_id}">
-          <i class="fas fa-trash"></i>
-        </button>
-      </div>
-    </div>`;
+      return `<div class="single-task ${completed && "task-completed"}">
+                <h5>
+                  <span><i class="fas fa-check-circle"></i></span>
+                  ${name}
+                </h5>
+                <div class="task-link">
+                  <!-- 編集リンク-->
+                  <a href="edit.html?id=${_id}" class="edit-link">
+                    <i class="fas fa-edit"></i>
+                  </a>
+                  <!-- ゴミ箱 -->
+                  <button type="button" class="delete-btn" data-id="${_id}">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </div>`;
     }).join("");
 
     tasksDOM.innerHTML = allTasks;

@@ -1,10 +1,12 @@
 const taskIDDOM = document.querySelector(".task-edit-id");
+const taskNameDOM = document.querySelector(".task-edit-name");
+const editFormDOM = document.querySelector(".single-task-form");
+const formAlertDOM = document.querySelector(".form-alert");
+const taskCompletedDOM = document.querySelector(".task-edit-completed");
 
 const params = window.location.search;
-
 const id = new URLSearchParams(params).get("id");
 
-console.log(id);
 
 // 1つのタスクを取得する
 const showTask = async () => {
@@ -12,8 +14,11 @@ const showTask = async () => {
     const { data: task } = await axios.get(`/api/v1/tasks/${id}`);
     const { _id, completed, name} = task;
     taskIDDOM.textContent = _id;
-
-    console.log(task);
+    taskNameDOM.value = name;
+    
+    if(completed) {
+      taskCompletedDOM.checked = true;
+    }
 
   } catch (err) {
     console.log(err);
@@ -21,3 +26,31 @@ const showTask = async () => {
 };
 
 showTask();
+
+// タスク編集
+editFormDOM.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  try {
+    const taskName = taskNameDOM.value;
+    taskCompleted = taskCompletedDOM.checked;
+    // console.log(taskCompleted);
+    const { data: task } = await axios.patch(`/api/v1/tasks/${id}`, {
+      name: taskName,
+      completed: taskCompleted,
+    });
+
+    formAlertDOM.style.display = "block";
+    formAlertDOM.textContent = "編集に成功しました";
+    formAlertDOM.classList.add("text-success");
+
+  } catch(err) {
+    console.log(err);
+    formAlertDOM.innerHTML = "エラーです。もう一度試してください。";
+  }
+
+  setTimeout(() => {
+    formAlertDOM.style.display = "none";
+    formAlertDOM.classList.remove("text-success");
+  }, 3000);
+});
+
