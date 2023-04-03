@@ -1,6 +1,6 @@
 const Task = require("../models/Task");
 
-
+// 一覧表示
 const getAllTasks = async (req, res) => {
   try {
     const allTask = await Task.find({});
@@ -10,7 +10,6 @@ const getAllTasks = async (req, res) => {
       res.status(500).json(err);
     }
 };
-
 
 // dbと接続する際は非同期処理でなければならない
 const createTask = async (req, res) => {
@@ -23,7 +22,7 @@ const createTask = async (req, res) => {
   }
 };
 
-// 
+// 個別取得
 const getSingleTask = async (req, res) => {
   try {
     const getSingleTask = await Task.findOne({ _id: req.params.id });
@@ -61,6 +60,7 @@ const updateTask = async (req, res) => {
   }
 }
 
+// 削除
 const deleteTask = async (req, res) => {
   try {
     const deleteTask = await Task.findOneAndDelete(
